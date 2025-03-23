@@ -1,6 +1,6 @@
 {
-  "id": "409207a7-8bd3-4c6e-8763-f3ab68517995",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "3dbaeaa0-e01e-46dd-8cb9-194b8300e039",
+  "prevId": "34fe8237-7aa6-41bc-9b63-da777b2e0e7b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -231,23 +231,17 @@
           "primaryKey": false,
           "notNull": true
         },
-        "university_id": {
-          "name": "university_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
         "password": {
           "name": "password",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "university_card": {
-          "name": "university_card",
+        "profile_picture": {
+          "name": "profile_picture",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "status": {
           "name": "status",
@@ -297,13 +291,6 @@
           "columns": [
             "email"
           ]
-        },
-        "users_university_id_unique": {
-          "name": "users_university_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "university_id"
-          ]
         }
       },
       "policies": {},
@@ -325,7 +312,9 @@
       "schema": "public",
       "values": [
         "USER",
-        "ADMIN"
+        "ADMIN",
+        "TEACHER",
+        "STUDENT"
       ]
     },
     "public.status": {

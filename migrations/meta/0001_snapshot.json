@@ -1,6 +1,6 @@
 {
-  "id": "681497e4-d260-4940-9818-613bd5d4a3ff",
-  "prevId": "aa0068f3-e243-4c1e-9be3-bac64918c082",
+  "id": "0334b510-d718-4558-8484-51bbaf4ae477",
+  "prevId": "409207a7-8bd3-4c6e-8763-f3ab68517995",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -239,12 +239,6 @@
         },
         "password": {
           "name": "password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "university_card": {
-          "name": "university_card",
           "type": "text",
           "primaryKey": false,
           "notNull": true
