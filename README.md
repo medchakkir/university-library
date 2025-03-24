@@ -660,7 +660,7 @@ export const navigationLinks = [
   {
     img: "/icons/user.svg",
     selectedImg: "/icons/user-fill.svg",
-    href: "/my-profile",
+    href: "/profile",
     label: "My Profile",
   },
 ];

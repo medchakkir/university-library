@@ -23,7 +23,6 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
-import FileUpload from "@/components/FileUpload";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
@@ -78,7 +77,7 @@ const AuthForm = <T extends FieldValues>({
       <p className="text-light-100">
         {isSignIn
           ? "Access the vast collection of resources, and stay updated"
-          : "Please complete all fields and upload a valid university ID to gain access to the library"}
+          : "Please complete all fields to gain access to the library"}
       </p>
       <Form {...form}>
         <form
@@ -96,25 +95,12 @@ const AuthForm = <T extends FieldValues>({
                     {FIELD_NAMES[field.name as keyof typeof FIELD_NAMES]}
                   </FormLabel>
                   <FormControl>
-                    {field.name === "universityCard" ? (
-                      <FileUpload
-                        type="image"
-                        accept="image/*"
-                        placeholder="Upload your ID"
-                        folder="ids"
-                        variant="dark"
-                        onFileChange={field.onChange}
-                      />
-                    ) : (
-                      <Input
-                        required
-                        type={
-                          FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]
-                        }
-                        {...field}
-                        className="form-input"
-                      />
-                    )}
+                    <Input
+                      required
+                      type={FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]}
+                      {...field}
+                      className="form-input"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -141,4 +127,5 @@ const AuthForm = <T extends FieldValues>({
     </div>
   );
 };
+
 export default AuthForm;
