@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
 import { hash } from "bcryptjs";
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { headers } from "next/headers";
 import ratelimit from "@/lib/ratelimit";
 import { redirect } from "next/navigation";
@@ -34,13 +34,13 @@ export const signInWithCredentials = async (
 
     return { success: true };
   } catch (error) {
-    console.log(error, "Signin error");
-    return { success: false, error: "Signin error" };
+    console.log(error, "Sign-in error");
+    return { success: false, error: "Sign-in error" };
   }
 };
 
 export const signUp = async (params: AuthCredentials) => {
-  const { fullName, email, universityId, password, universityCard } = params;
+  const { fullName, email, password } = params;
 
   const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
   const { success } = await ratelimit.limit(ip);
@@ -63,9 +63,7 @@ export const signUp = async (params: AuthCredentials) => {
     await db.insert(users).values({
       fullName,
       email,
-      universityId,
       password: hashedPassword,
-      universityCard,
     });
 
     await workflowClient.trigger({
@@ -80,7 +78,11 @@ export const signUp = async (params: AuthCredentials) => {
 
     return { success: true };
   } catch (error) {
-    console.log(error, "Signup error");
-    return { success: false, error: "Signup error" };
+    console.log(error, "Sign-up error");
+    return { success: false, error: "Sign-up error" };
   }
+};
+
+export const handleSignOut = async () => {
+  await signOut();
 };
