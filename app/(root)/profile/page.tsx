@@ -1,11 +1,8 @@
-import { Button } from "@/components/ui/button";
 import BookList from "@/components/BookList";
-import { handleSignOut } from "@/lib/actions/auth";
 import { books, borrowRecords } from "@/database/schema";
 import { db } from "@/database/drizzle";
 import { eq } from "drizzle-orm";
 import { auth } from "@/auth";
-import BookOverview from "@/components/BookOverview";
 
 const Page = async () => {
   const session = await auth();

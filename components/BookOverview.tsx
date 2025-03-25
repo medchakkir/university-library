@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import BookCover from "@/components/BookCover";
 import BorrowBook from "@/components/BorrowBook";

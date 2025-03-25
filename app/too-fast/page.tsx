@@ -1,5 +1,3 @@
-import React from "react";
-
 const Page = () => {
   return (
     <main className="root-container flex min-h-screen flex-col items-center justify-center">

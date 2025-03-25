@@ -1,4 +1,3 @@
-import React from "react";
 import { db } from "@/database/drizzle";
 import { books } from "@/database/schema";
 import { eq } from "drizzle-orm";

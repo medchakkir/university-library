@@ -18,7 +18,7 @@ import BookCover from "@/components/BookCover";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
-import EditBookModal from "@/components/admin/EditBookModel"; // Import EditBookModal
+import EditBookModal from "@/components/admin/EditBookModel";
 
 export const bookColumns: ColumnDef<Book>[] = [
   {

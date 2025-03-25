@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+
 import { IKVideo, ImageKitProvider } from "imagekitio-next";
 import config from "@/lib/config";
 

@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import BookCover from "@/components/BookCover";
 import { cn } from "@/lib/utils";
