@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import BookForm from "@/components/admin/forms/BookForm";
 import { MoveLeft } from "lucide-react";
 
 const Page = () => {
@@ -14,9 +13,7 @@ const Page = () => {
         </Link>
       </Button>
 
-      <section className="w-full max-w-2xl">
-        <BookForm />
-      </section>
+      <section className="w-full max-w-2xl"></section>
     </>
   );
 };

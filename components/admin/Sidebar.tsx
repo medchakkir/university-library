@@ -7,6 +7,7 @@ import { cn, getInitials } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Session } from "next-auth";
+import { handleSignOut } from "@/lib/actions/auth";
 
 const Sidebar = ({ session }: { session: Session }) => {
   const pathname = usePathname();
@@ -65,11 +66,18 @@ const Sidebar = ({ session }: { session: Session }) => {
             {getInitials(session?.user?.name || "IN")}
           </AvatarFallback>
         </Avatar>
-
         <div className="flex flex-col max-md:hidden">
           <p className="font-semibold text-dark-200">{session?.user?.name}</p>
           <p className="text-xs text-light-500">{session?.user?.email}</p>
         </div>
+
+        {/* Logout Button */}
+        <button
+          onClick={handleSignOut}
+          className="ml-auto flex items-center gap-2 "
+        >
+          <Image src="/icons/logout.svg" alt="logo" height={27} width={27} />
+        </button>
       </div>
     </div>
   );
