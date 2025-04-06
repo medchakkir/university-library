@@ -13,12 +13,12 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   if (!session) redirect("/sign-in");
 
   after(async () => {
-    if (!session?.user?.id) return;
+    if (!session?.user?.id) redirect("/sign-in");
 
     const user = await db
       .select()
       .from(users)
-      .where(eq(users.id, session?.user?.id))
+      .where(eq(users.id, session.user.id))
       .limit(1);
 
     if (user[0].lastActivityDate === new Date().toISOString().slice(0, 10))
@@ -27,7 +27,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
     await db
       .update(users)
       .set({ lastActivityDate: new Date().toISOString().slice(0, 10) })
-      .where(eq(users.id, session?.user?.id));
+      .where(eq(users.id, session.user.id));
   });
 
   return (

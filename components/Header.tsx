@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Book, User, Settings, Shield } from "lucide-react";
+import { LogOut, Book, User, Shield, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Session } from "next-auth";
@@ -19,15 +19,29 @@ import {
 
 const Header = ({ session }: { session: Session }) => {
   const pathname = usePathname();
-  console.log("User is:", session.user.role);
 
   return (
     <header className="my-10 flex justify-between gap-5">
-      <Link href="/">
+      <Link href="/" className="flex items-center gap-2">
         <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
+        <span className="hidden text-2xl font-semibold text-light-100 sm:inline">
+          Bookwise
+        </span>
       </Link>
 
       <ul className="flex flex-row items-center gap-8">
+        <li>
+          <Link
+            href="/search"
+            className={cn(
+              "text-base cursor-pointer capitalize flex items-center gap-2",
+              pathname === "/search" ? "text-light-200" : "text-light-100",
+            )}
+          >
+            <Search className="size-4" />
+            Search
+          </Link>
+        </li>
         <li>
           <Link
             href="/library"
@@ -59,12 +73,7 @@ const Header = ({ session }: { session: Session }) => {
                   <span>Profile</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/settings" className="flex items-center gap-2">
-                  <Settings className="size-4" /> {/* Settings Icon */}
-                  <span>Settings</span>
-                </Link>
-              </DropdownMenuItem>
+
               {session.user.role === "ADMIN" && ( // Conditionally show Admin link
                 <>
                   <DropdownMenuSeparator />

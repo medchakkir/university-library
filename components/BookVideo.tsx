@@ -1,16 +1,12 @@
 "use client";
 
-import { IKVideo, ImageKitProvider } from "imagekitio-next";
-import config from "@/lib/config";
-
 const BookVideo = ({ videoUrl }: { videoUrl: string }) => {
   return (
-    <ImageKitProvider
-      publicKey={config.env.imagekit.publicKey}
-      urlEndpoint={config.env.imagekit.urlEndpoint}
-    >
-      <IKVideo path={videoUrl} controls={true} className="w-full rounded-xl" />
-    </ImageKitProvider>
+    <video controls className="w-full rounded-xl">
+      <source src={videoUrl} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
   );
 };
+
 export default BookVideo;
