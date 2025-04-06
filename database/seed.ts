@@ -1,36 +1,34 @@
 import dummyBooks from "../dummybooks.json";
-import ImageKit from "imagekit";
 import { books } from "@/database/schema";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { config } from "dotenv";
+import fs from "fs";
+import path from "path";
+import axios from "axios";
 
 config({ path: ".env.local" });
 
 const sql = neon(process.env.DATABASE_URL!);
 export const db = drizzle({ client: sql });
 
-const imagekit = new ImageKit({
-  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
-  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!,
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
-});
+const uploadToDb = async (url: string, fileName: string, folder: string) => {
+  const folderPath = path.resolve(folder);
+  const filePath = path.join(folderPath, fileName);
 
-const uploadToImageKit = async (
-  url: string,
-  fileName: string,
-  folder: string,
-) => {
   try {
-    const response = await imagekit.upload({
-      file: url,
-      fileName,
-      folder,
-    });
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, { recursive: true });
+    }
 
-    return response.filePath;
+    const response = await axios.get(url, { responseType: "arraybuffer" });
+    fs.writeFileSync(filePath, response.data);
+
+    // Return path relative to public folder
+    return `${folder.replace("./public", "")}/${fileName}`;
   } catch (error) {
-    console.error("Error uploading image to ImageKit:", error);
+    console.error(`Error downloading/saving ${fileName}:`, error);
+    return "";
   }
 };
 
@@ -39,17 +37,19 @@ const seed = async () => {
 
   try {
     for (const book of dummyBooks) {
-      const coverUrl = (await uploadToImageKit(
-        book.coverUrl,
-        `${book.title}.jpg`,
-        "/books/covers",
-      )) as string;
+      const baseName = book.title.replace(/\s+/g, "_");
 
-      const videoUrl = (await uploadToImageKit(
+      const coverUrl = await uploadToDb(
+        book.coverUrl,
+        `${baseName}.jpg`,
+        "./public/covers",
+      );
+
+      const videoUrl = await uploadToDb(
         book.videoUrl,
-        `${book.title}.mp4`,
-        "/books/videos",
-      )) as string;
+        `${baseName}.mp4`,
+        "./public/videos",
+      );
 
       await db.insert(books).values({
         ...book,
