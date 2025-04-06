@@ -25,6 +25,7 @@ import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import FileUpload from "@/components/FileUpload";
 
 interface Props<T extends FieldValues> {
   schema: ZodType<T>;
@@ -95,12 +96,25 @@ const AuthForm = <T extends FieldValues>({
                     {FIELD_NAMES[field.name as keyof typeof FIELD_NAMES]}
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      required
-                      type={FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]}
-                      {...field}
-                      className="form-input"
-                    />
+                    {field.name === "profilePicture" ? (
+                      <FileUpload
+                        type="image"
+                        accept="image/*"
+                        placeholder="Upload your profile picture"
+                        folder="ids"
+                        variant="dark"
+                        onFileChange={field.onChange}
+                      />
+                    ) : (
+                      <Input
+                        required
+                        type={
+                          FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]
+                        }
+                        {...field}
+                        className="form-input"
+                      />
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -108,8 +122,16 @@ const AuthForm = <T extends FieldValues>({
             />
           ))}
 
-          <Button type="submit" className="form-btn">
-            {isSignIn ? "Sign In" : "Sign Up"}
+          <Button
+            type="submit"
+            className="form-btn"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting
+              ? "Loading..."
+              : isSignIn
+                ? "Sign In"
+                : "Sign Up"}
           </Button>
         </form>
       </Form>

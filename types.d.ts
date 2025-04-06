@@ -19,6 +19,7 @@ interface AuthCredentials {
   fullName: string;
   email: string;
   password: string;
+  profilePicture?: string;
 }
 
 interface BookParams {
@@ -37,4 +38,16 @@ interface BookParams {
 interface BorrowBookParams {
   bookId: string;
   userId: string;
+}
+
+interface User {
+  id: string;
+  role: "USER" | "ADMIN" | "TEACHER" | "STUDENT" | null;
+  fullName: string;
+  email: string;
+  password: string;
+  profilePicture: string | null;
+  status: "PENDING" | "APPROVED" | "REJECTED" | null;
+  lastActivityDate: string | null;
+  createdAt: Date | null;
 }

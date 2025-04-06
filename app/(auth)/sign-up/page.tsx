@@ -12,6 +12,7 @@ const Page = () => (
       fullName: "",
       email: "",
       password: "",
+      profilePicture: "",
     }}
     onSubmit={signUp}
   />
