@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 
 import "@/styles/admin.css";
 import Sidebar from "@/components/admin/Sidebar";
-import Header from "@/components/admin/Header";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
 import { eq } from "drizzle-orm";
+import { Header } from "@/components/admin/Header";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
@@ -28,7 +28,8 @@ const Layout = async ({ children }: { children: ReactNode }) => {
       <Sidebar session={session} />
 
       <div className="admin-container">
-        <Header session={session} />
+        {/* <Header session={session} /> */}
+        <Header />
         {children}
       </div>
     </main>

@@ -1,30 +1,70 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Pencil, Trash2 } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import BookCover from "@/components/BookCover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
+import {
   AlertDialog,
-  AlertDialogTrigger,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import BookCover from "@/components/BookCover";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "@/hooks/use-toast";
-import EditBookModal from "@/components/admin/EditBookModel";
 
-export const bookColumns: ColumnDef<Book>[] = [
+export const BooksColumns: ColumnDef<Book>[] = [
   {
-    accessorKey: "coverUrl",
-    header: "Book Title",
-    size: 320,
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+
+  {
+    accessorKey: "title",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Title
+          <ArrowUpDown className="ml-2 size-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <div className="flex items-center gap-3">
         <BookCover
@@ -46,8 +86,17 @@ export const bookColumns: ColumnDef<Book>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Date Created",
-    size: 100,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date Created
+          <ArrowUpDown className="ml-2 size-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) =>
       row.original.createdAt
         ? new Date(row.original.createdAt).toLocaleDateString("en-US", {
@@ -59,15 +108,10 @@ export const bookColumns: ColumnDef<Book>[] = [
   },
   {
     id: "actions",
-    header: "Actions",
-    size: 40,
+    enableHiding: false,
     cell: ({ row }) => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       const router = useRouter();
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       const [open, setOpen] = useState(false);
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const [isEditModalOpen, setEditModalOpen] = useState(false); // Manage edit modal visibility
 
       const handleDelete = async () => {
         try {
@@ -81,7 +125,7 @@ export const bookColumns: ColumnDef<Book>[] = [
 
           setOpen(false);
           router.refresh();
-          // Show toast notification
+
           toast({
             title: "Book Deleted",
             description: `"${row.original.title}" has been successfully removed.`,
@@ -97,45 +141,56 @@ export const bookColumns: ColumnDef<Book>[] = [
       };
 
       return (
-        <div className="flex gap-2">
-          {/* Edit Button */}
-          {/*
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setEditModalOpen(true)}
-            >
-              <Pencil className="size-4 text-blue-500" />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="size-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="size-4" />
             </Button>
-          */}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(row.original.id)}
+            >
+              Copy book ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Edit book</DropdownMenuItem>
 
-          {/* Delete Button with AlertDialog */}
-          <AlertDialog open={open} onOpenChange={setOpen}>
-            <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Trash2 className="size-4 text-[#EF3A4B]" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete this book? This action cannot
-                  be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleDelete}
-                  className="bg-[#ef3a4b] text-white"
+            <AlertDialog open={open} onOpenChange={setOpen}>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    setTimeout(() => setOpen(true), 0);
+                  }}
+                  className="text-red-800"
                 >
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+                  Delete book
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete this book? This action
+                    cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDelete}
+                    className="bg-red-800 text-white"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </DropdownMenuContent>
+        </DropdownMenu>
       );
     },
   },

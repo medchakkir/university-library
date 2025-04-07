@@ -1,19 +1,18 @@
-import { Session } from "next-auth";
+// import { Separator } from "@/components/ui/separator";
 
-const Header = ({ session }: { session: Session }) => {
+export function Header() {
   return (
-    <header className="admin-header">
-      <div>
-        <h2 className="text-2xl font-semibold text-dark-400">
-          {session?.user?.name}
-        </h2>
-        <p className="text-base text-slate-500">
-          Monitor all of your users and books here
-        </p>
+    <header className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear">
+      <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
+        {/*
+        <SidebarTrigger className="-ml-1" />
+        <Separator
+          orientation="vertical"
+          className="mx-2 data-[orientation=vertical]:h-4"
+        />
+        */}
+        <h1 className="text-2xl font-semibold">Dashboard</h1>
       </div>
-
-      {/*<p>Search</p>*/}
     </header>
   );
-};
-export default Header;
+}
