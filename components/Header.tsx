@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Book, User, Shield, Search } from "lucide-react";
+import { Book, Home, LogOut, Search, Shield, User } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Session } from "next-auth";
@@ -30,6 +30,18 @@ const Header = ({ session }: { session: Session }) => {
       </Link>
 
       <ul className="flex flex-row items-center gap-8">
+        <li>
+          <Link
+            href="/"
+            className={cn(
+              "text-base cursor-pointer capitalize flex items-center gap-2",
+              pathname === "/" ? "text-light-200" : "text-light-100",
+            )}
+          >
+            <Home className="size-4" />
+            Home
+          </Link>
+        </li>
         <li>
           <Link
             href="/search"

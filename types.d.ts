@@ -42,7 +42,7 @@ interface BorrowBookParams {
 
 interface User {
   id: string;
-  role: "USER" | "ADMIN" | "TEACHER" | "STUDENT" | null;
+  role: "USER" | "ADMIN" | null;
   fullName: string;
   email: string;
   password: string;
