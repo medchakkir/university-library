@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/admin/data-table";
+import { DataTable } from "@/components/admin/DataTable";
 import { UsersColumns } from "./columns";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";

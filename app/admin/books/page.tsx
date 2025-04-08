@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BooksColumns } from "@/app/admin/books/columns";
-import { DataTable } from "@/components/admin/data-table";
+import { DataTable } from "@/components/admin/DataTable";
 import { db } from "@/database/drizzle";
 import { books } from "@/database/schema";
 
