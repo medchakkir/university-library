@@ -5,6 +5,11 @@ import { books, borrowRecords } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import dayjs from "dayjs";
 
+interface BorrowBookParams {
+  bookId: string;
+  userId: string;
+}
+
 export const borrowBook = async (params: BorrowBookParams) => {
   const { userId, bookId } = params;
 

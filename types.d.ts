@@ -1,3 +1,10 @@
+interface AuthCredentials {
+  fullName: string;
+  email: string;
+  password: string;
+  profilePicture?: string;
+}
+
 interface Book {
   id: string;
   title: string;
@@ -15,13 +22,6 @@ interface Book {
   isLoanedBook?: boolean;
 }
 
-interface AuthCredentials {
-  fullName: string;
-  email: string;
-  password: string;
-  profilePicture?: string;
-}
-
 interface BookParams {
   title: string;
   author: string;
@@ -35,11 +35,6 @@ interface BookParams {
   summary: string;
 }
 
-interface BorrowBookParams {
-  bookId: string;
-  userId: string;
-}
-
 interface User {
   id: string;
   role: "USER" | "ADMIN" | null;
@@ -47,7 +42,14 @@ interface User {
   email: string;
   password: string;
   profilePicture: string | null;
-  status: "PENDING" | "APPROVED" | "REJECTED" | null;
-  lastActivityDate: string | null;
   createdAt: Date | null;
+  lastActivityDate: string | null;
+}
+
+interface UserParams {
+  role: "USER" | "ADMIN" | null;
+  fullName: string;
+  email: string;
+  password: string;
+  profilePicture: string | null;
 }

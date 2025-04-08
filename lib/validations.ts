@@ -36,3 +36,11 @@ export const bookSchema = z.object({
   videoUrl: z.string().nonempty(),
   summary: z.string().trim().min(10),
 });
+
+export const userSchema = z.object({
+  fullName: z.string().trim().min(3).max(100),
+  email: z.string().email(),
+  password: z.string().min(8).max(100),
+  profilePicture: z.string().nonempty(),
+  role: z.string().nonempty(),
+});

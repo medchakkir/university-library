@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import BookForm from "@/components/admin/forms/BookForm";
 import { MoveLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import CreateBookForm from "@/components/admin/forms/CreateBookForm";
 
 const Page = () => {
   return (
     <>
-      <Button asChild className="back-btn">
+      <Button className="back-btn" asChild>
         <Link href="/admin/books">
           <MoveLeft className="size-4" />
           Go Back
@@ -14,7 +14,7 @@ const Page = () => {
       </Button>
 
       <section className="w-full max-w-2xl">
-        <BookForm />
+        <CreateBookForm />
       </section>
     </>
   );
