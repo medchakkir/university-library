@@ -1,13 +1,13 @@
-import BookList from "@/components/BookList";
 import { books, borrowRecords, users } from "@/database/schema";
 import { db } from "@/database/drizzle";
-import { and, desc, eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { auth } from "@/auth";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { redirect } from "next/navigation";
+import BookCover from "@/components/BookCover";
 
 const Page = async () => {
   const session = await auth();
@@ -28,6 +28,7 @@ const Page = async () => {
       author: books.author,
       genre: books.genre,
       coverImage: books.coverUrl,
+      coverColor: books.coverColor,
       borrowedDate: borrowRecords.borrowDate,
       returnedDate: borrowRecords.dueDate,
     })
@@ -142,10 +143,10 @@ const Page = async () => {
                 >
                   <div className="relative left-12 top-6 h-[199px] w-36 shadow-[-30px_4px_50px_#00000066]">
                     <div className="relative h-[199px]">
-                      <img
-                        className="absolute left-0 top-0 h-[174px] w-[126px] object-cover"
-                        alt={`${book.title} cover`}
-                        src={book.coverImage}
+                      <BookCover
+                        className="absolute left-0 top-0 size-full object-cover"
+                        coverImage={book.coverImage}
+                        coverColor={book.coverColor}
                       />
                     </div>
                   </div>

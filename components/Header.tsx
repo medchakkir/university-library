@@ -76,7 +76,7 @@ const Header = ({ session }: { session: Session }) => {
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent className="w-56 " align="end" forceMount>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
@@ -102,7 +102,7 @@ const Header = ({ session }: { session: Session }) => {
                 <button
                   onClick={handleSignOut}
                   type="submit"
-                  className="m-0 flex w-full cursor-pointer items-center p-[1/2] text-left text-sm font-normal text-black focus:bg-accent focus:text-accent-foreground"
+                  className="m-0 flex w-full cursor-pointer items-center p-[1/2] text-left text-sm font-normal focus:bg-accent focus:text-accent-foreground"
                 >
                   <LogOut className="size-4" /> {/* Log-Out Icon */}
                   <span>Log out</span>
