@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import { writeFile } from "fs/promises";
-import { mkdirSync, existsSync } from "fs";
+import { existsSync, mkdirSync } from "fs";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,19 +16,25 @@ export async function POST(req: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const uploadsDir = path.join(process.cwd(), "public/uploads");
 
+    // Get folder from query params (like ?folder=books/videos)
+    const folder = req.nextUrl.searchParams.get("folder") || "uploads";
+    const uploadsDir = path.join(process.cwd(), "public", folder);
+
+    // Make the folder if it doesn't exist
     if (!existsSync(uploadsDir)) {
       mkdirSync(uploadsDir, { recursive: true });
     }
 
+    // Create a unique filename
     const fileName = `${Date.now()}-${file.name}`;
     const filePath = path.join(uploadsDir, fileName);
 
+    // Write file to disk
     await writeFile(filePath, buffer);
 
-    // Accessible path from browser
-    const publicPath = `/uploads/${fileName}`;
+    // Return a browser-friendly path
+    const publicPath = `/${folder}/${fileName}`;
 
     return NextResponse.json({ filePath: publicPath }, { status: 200 });
   } catch (err: any) {

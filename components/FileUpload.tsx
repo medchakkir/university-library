@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -59,7 +59,7 @@ const FileUpload = ({
     try {
       setProgress(10);
 
-      const res = await fetch("/api/upload", {
+      const res = await fetch(`/api/upload?folder=${folder}`, {
         method: "POST",
         body: formData,
       });
@@ -87,6 +87,8 @@ const FileUpload = ({
     }
   };
 
+  const inputId = `${type}-upload`;
+
   return (
     <div className="flex w-full flex-col gap-2">
       <input
@@ -94,10 +96,10 @@ const FileUpload = ({
         accept={accept}
         onChange={handleUpload}
         className="hidden"
-        id="fileInput"
+        id={inputId}
       />
 
-      <label htmlFor="fileInput" className={cn("upload-btn", styles.button)}>
+      <label htmlFor={inputId} className={cn("upload-btn", styles.button)}>
         <Image
           src="/icons/upload.svg"
           alt="upload-icon"

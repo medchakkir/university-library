@@ -27,6 +27,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Link from "next/link";
 
 export const BooksColumns: ColumnDef<Book>[] = [
   {
@@ -113,7 +114,7 @@ export const BooksColumns: ColumnDef<Book>[] = [
       const router = useRouter();
       const [open, setOpen] = useState(false);
 
-      const handleDelete = async () => {
+      const handleBookDelete = async () => {
         try {
           const res = await fetch(`/api/books/${row.original.id}`, {
             method: "DELETE",
@@ -150,22 +151,22 @@ export const BooksColumns: ColumnDef<Book>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(row.original.id)}
-            >
-              Copy book ID
+            <DropdownMenuItem>
+              <Link href={`books/${row.original.id}`}>View Book</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit book</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`books/edit/${row.original.id}`}>Edit book</Link>
+            </DropdownMenuItem>
 
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogTrigger asChild>
                 <DropdownMenuItem
+                  className="text-red-800"
                   onSelect={(e) => {
                     e.preventDefault();
                     setTimeout(() => setOpen(true), 0);
                   }}
-                  className="text-red-800"
                 >
                   Delete book
                 </DropdownMenuItem>
@@ -181,7 +182,7 @@ export const BooksColumns: ColumnDef<Book>[] = [
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
-                    onClick={handleDelete}
+                    onClick={handleBookDelete}
                     className="bg-red-800 text-white"
                   >
                     Delete
