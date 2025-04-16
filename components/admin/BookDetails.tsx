@@ -1,7 +1,8 @@
 "use client";
 
-import { ArrowLeftIcon, CalendarIcon, EditIcon } from "lucide-react";
+import { CalendarIcon, EditIcon, MoveLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function BookDetails({ book }: { book: Book }) {
   const formattedDate = book.createdAt
@@ -9,11 +10,13 @@ export default function BookDetails({ book }: { book: Book }) {
     : "Unknown";
 
   return (
-    <div className="mx-auto max-w-5xl space-y-10 bg-[#f8f8ff] py-6">
+    <div className="max-w-5xl space-y-10 bg-[#f8f8ff] py-6">
       {/* Back Button */}
-      <Button variant="outline" className="flex items-center gap-2">
-        <ArrowLeftIcon className="size-4" />
-        <span className="text-sm font-medium text-[#3a354e]">Go back</span>
+      <Button className="back-btn" asChild>
+        <Link href="/admin/books">
+          <MoveLeft className="size-4" />
+          Go Back
+        </Link>
       </Button>
 
       {/* Top Content */}
@@ -45,9 +48,14 @@ export default function BookDetails({ book }: { book: Book }) {
           </h3>
           <p className="text-slate-500">{book.genre}</p>
 
-          <Button className="flex w-fit gap-2 bg-primary font-bold text-white">
-            <EditIcon className="size-4" />
-            Edit Book
+          <Button
+            className="flex w-fit gap-2 bg-primary font-bold text-white"
+            asChild
+          >
+            <Link href={`/admin/books/edit/${book.id}`}>
+              <EditIcon className="size-4" />
+              Edit Book
+            </Link>
           </Button>
         </div>
       </div>

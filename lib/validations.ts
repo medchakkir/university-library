@@ -11,7 +11,7 @@ export const signUpSchema = z.object({
       (val) =>
         val.startsWith("http://") ||
         val.startsWith("https://") ||
-        val.startsWith("/uploads/"),
+        val.startsWith("/ids/"),
       { message: "Invalid profile picture URL" },
     ),
 });
