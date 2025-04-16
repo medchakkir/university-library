@@ -6,8 +6,8 @@ export const signUpSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters long"),
   profilePicture: z
     .string()
-    .min(1, "Profile picture is required")
-    .refine((val) => val.startsWith("/users/profiles"), {
+    .optional()
+    .refine((val) => !val || val.startsWith("/users/profiles"), {
       message: "Invalid profile picture URL",
     }),
 });
