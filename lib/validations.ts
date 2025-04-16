@@ -7,13 +7,9 @@ export const signUpSchema = z.object({
   profilePicture: z
     .string()
     .min(1, "Profile picture is required")
-    .refine(
-      (val) =>
-        val.startsWith("http://") ||
-        val.startsWith("https://") ||
-        val.startsWith("/ids/"),
-      { message: "Invalid profile picture URL" },
-    ),
+    .refine((val) => val.startsWith("/users/profiles"), {
+      message: "Invalid profile picture URL",
+    }),
 });
 
 export const signInSchema = z.object({
