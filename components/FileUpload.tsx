@@ -15,7 +15,7 @@ const {
 
 const authenticator = async () => {
   try {
-    const response = await fetch(`${config.env.apiEndpoint}/api/auth/imagekit`);
+    const response = await fetch(`${config.env.apiEndpoint}/api/imagekit`);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -171,10 +171,10 @@ const FileUpload = ({
         </div>
       )}
 
-      {file &&
+      {file?.filePath &&
         (type === "image" ? (
           <IKImage
-            alt={file.filePath}
+            alt={file.filePath ?? "Uploaded Image"}
             path={file.filePath}
             width={500}
             height={300}
