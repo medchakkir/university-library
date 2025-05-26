@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import BookCover from "@/components/BookCover";
 import Image from "next/image";
+import ReturnBook from "@/components/ReturnBook"; // Import the ReturnBook component
 
 export interface BorrowedBook {
   id: string;
@@ -20,9 +21,13 @@ export interface BorrowedBook {
 
 interface BorrowedBooksListProps {
   borrowedBooks: BorrowedBook[];
+  userId: string; // Add userId to props
 }
 
-const BorrowedBooksList = ({ borrowedBooks }: BorrowedBooksListProps) => {
+const BorrowedBooksList = ({
+  borrowedBooks,
+  userId,
+}: BorrowedBooksListProps) => {
   return (
     <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {borrowedBooks.map((book) => (
@@ -31,10 +36,12 @@ const BorrowedBooksList = ({ borrowedBooks }: BorrowedBooksListProps) => {
           className="relative flex w-full flex-col items-center gap-5 rounded-2xl p-5 shadow-[0px_0px_70px_#00000033] [background:linear-gradient(180deg,rgba(18,20,29,1)_0%,rgba(18,21,31,1)_100%)]"
         >
           {book.status.type === "overdue" && (
-            <img
+            <Image
               className="absolute -left-1 top-[-3px] z-10 size-[29px]"
-              alt="Warning"
-              src="https://c.animaapp.com/m8soetyfkBQt6N/img/vuesax-outline-warning-2.svg"
+              alt="Warning icon"
+              src="/icons/warning.svg"
+              width={29}
+              height={29}
             />
           )}
 
@@ -77,10 +84,10 @@ const BorrowedBooksList = ({ borrowedBooks }: BorrowedBooksListProps) => {
               <div className="flex items-center gap-1">
                 {book.status.type === "due" && (
                   <Image
-                    src="/icons/calender.svg"
+                    src="/icons/clock.svg"
                     alt="Clock icon"
-                    width={37}
-                    height={37}
+                    width={27}
+                    height={27}
                   />
                 )}
                 {book.status.type === "overdue" && (
@@ -100,13 +107,22 @@ const BorrowedBooksList = ({ borrowedBooks }: BorrowedBooksListProps) => {
                   />
                 )}
                 <span
-                  className={`font-ibm-plex-sans text-base font-normal leading-[25.6px] ${book.status.type === "overdue" ? "text-[#ff6c6e]" : "text-[#d5dfff]"}`}
+                  className={`font-ibm-plex-sans text-base font-normal leading-[25.6px] ${
+                    book.status.type === "overdue"
+                      ? "text-[#ff6c6e]"
+                      : "text-[#d5dfff]"
+                  }`}
                 >
                   {book.status.text}
                 </span>
               </div>
             </div>
           </div>
+
+          {/* Add ReturnBook button for books that are not returned */}
+          {book.status.type !== "returned" && (
+            <ReturnBook userId={userId} bookId={book.id} />
+          )}
         </Card>
       ))}
     </div>
