@@ -3,7 +3,22 @@ import BookCover from "@/components/BookCover";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Book } from "@/types";
 
+/**
+ * Props interface for the BookCard component
+ * Extends the Book interface with additional display properties
+ */
+interface BookCardProps extends Book {
+  /** Whether this book is currently loaned to the user */
+  isLoanedBook?: boolean;
+}
+
+/**
+ * BookCard component that displays a book's basic information in a card format
+ * @param {BookCardProps} props - The component props
+ * @returns {JSX.Element} The rendered component
+ */
 const BookCard = ({
   id,
   title,
@@ -11,7 +26,7 @@ const BookCard = ({
   coverColor,
   coverUrl,
   isLoanedBook = false,
-}: Book) => (
+}: BookCardProps) => (
   <li className={cn(isLoanedBook && "xs:w-52 w-full")}>
     <Link
       href={`/books/${id}`}

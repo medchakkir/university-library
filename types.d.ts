@@ -1,11 +1,11 @@
-interface AuthCredentials {
+export interface AuthCredentials {
   fullName: string;
   email: string;
   password: string;
   profilePicture?: string;
 }
 
-interface Book {
+export interface Book {
   id: string;
   title: string;
   author: string;
@@ -22,7 +22,7 @@ interface Book {
   isLoanedBook?: boolean;
 }
 
-interface BookParams {
+export interface BookParams {
   title: string;
   author: string;
   genre: string;
@@ -35,7 +35,7 @@ interface BookParams {
   summary: string;
 }
 
-interface User {
+export interface User {
   id: string;
   role: "USER" | "ADMIN" | null;
   fullName: string;
@@ -46,7 +46,7 @@ interface User {
   lastActivityDate: string | null;
 }
 
-interface UserParams {
+export interface UserParams {
   role: "USER" | "ADMIN" | null;
   fullName: string;
   email: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { SearchIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,18 +21,47 @@ import {
 } from "@/components/ui/select";
 import BookCover from "@/components/BookCover";
 
+/**
+ * Interface representing a book in the library
+ */
+interface Book {
+  id: string;
+  title: string;
+  author: string;
+  genre: string;
+  coverColor: string;
+  coverUrl: string;
+}
+
+/**
+ * Props interface for the SearchBook component
+ */
+interface SearchBookProps {
+  books: Book[];
+}
+
+/**
+ * Constants for pagination
+ */
 const BOOKS_PER_PAGE = 12;
 
-const SearchBook = ({ books }: { books: Book[] }) => {
+/**
+ * SearchBook component that provides a searchable and filterable interface for books
+ * @param {SearchBookProps} props - The component props
+ * @returns {JSX.Element} The rendered component
+ */
+const SearchBook = ({ books }: SearchBookProps) => {
   const [search, setSearch] = useState("");
   const [genreFilter, setGenreFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Extract unique genres from books
   const genres = useMemo(() => {
     const unique = new Set(books.map((book) => book.genre));
     return Array.from(unique);
   }, [books]);
 
+  // Filter books based on search query and genre filter
   const filteredBooks = useMemo(() => {
     const query = search.toLowerCase();
 
@@ -54,11 +83,11 @@ const SearchBook = ({ books }: { books: Book[] }) => {
   const totalPages = Math.ceil(filteredBooks.length / BOOKS_PER_PAGE);
   const paginatedBooks = filteredBooks.slice(
     (currentPage - 1) * BOOKS_PER_PAGE,
-    currentPage * BOOKS_PER_PAGE,
+    currentPage * BOOKS_PER_PAGE
   );
 
   // Reset to page 1 when search or filter changes
-  useMemo(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [search, genreFilter]);
 
