@@ -28,11 +28,19 @@ const BookOverview = async ({
   id,
   userId,
 }: BookOverviewProps) => {
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, userId))
-    .limit(1);
+  // Only fetch user if userId is provided
+  let user = null;
+  if (userId) {
+    const userResult = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
+    
+    if (userResult.length > 0) {
+      user = userResult[0];
+    }
+  }
 
   const borrowingEligibility: BorrowingEligibility = {
     isEligible: availableCopies > 0,
@@ -41,6 +49,7 @@ const BookOverview = async ({
         ? "Book is not available"
         : "You are not eligible to borrow this book",
   };
+  
   return (
     <section className="book-overview">
       <div className="flex flex-1 flex-col gap-5">

@@ -6,10 +6,13 @@ import { auth } from "@/auth";
 import BookOverview from "@/components/BookOverview";
 import BookVideo from "@/components/BookVideo";
 import SimilarBooks from "@/components/SimilarBooks";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
   const session = await auth();
+  const userId = session?.user?.id || "";
 
   // Fetch data based on id
   const [bookDetails] = await db
@@ -28,7 +31,17 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <BookOverview {...bookDetails} userId={session?.user?.id as string} />
+      <BookOverview {...bookDetails} userId={userId} />
+
+      {!session && (
+        <div className="mt-6 flex justify-center">
+          <Link href="/sign-in">
+            <Button size="lg" className="bg-primary text-dark-100">
+              Sign in to borrow this book
+            </Button>
+          </Link>
+        </div>
+      )}
 
       <div className="book-details">
         <div className="flex-[1.5]">
