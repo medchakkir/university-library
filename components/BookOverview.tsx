@@ -4,10 +4,17 @@ import BorrowBook from "@/components/BorrowBook";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
 import { eq } from "drizzle-orm";
+import { Book } from "@/types";
 
-interface Props extends Book {
+interface BookOverviewProps extends Book {
   userId: string;
 }
+
+interface BorrowingEligibility {
+  isEligible: boolean;
+  message: string;
+}
+
 const BookOverview = async ({
   title,
   author,
@@ -20,14 +27,14 @@ const BookOverview = async ({
   coverUrl,
   id,
   userId,
-}: Props) => {
+}: BookOverviewProps) => {
   const [user] = await db
     .select()
     .from(users)
     .where(eq(users.id, userId))
     .limit(1);
 
-  const borrowingEligibility = {
+  const borrowingEligibility: BorrowingEligibility = {
     isEligible: availableCopies > 0,
     message:
       availableCopies <= 0

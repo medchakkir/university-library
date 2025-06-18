@@ -17,7 +17,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const Header = ({ session }: { session: Session }) => {
+interface HeaderProps {
+  session: Session;
+}
+
+const Header = ({ session }: HeaderProps) => {
   const pathname = usePathname();
 
   return (

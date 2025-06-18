@@ -7,12 +7,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import { returnBook } from "@/lib/actions/book";
 
-interface Props {
+interface ReturnBookProps {
   userId: string;
   bookId: string;
 }
 
-const ReturnBook = ({ userId, bookId }: Props) => {
+const ReturnBook = ({ userId, bookId }: ReturnBookProps) => {
   const router = useRouter();
   const [returning, setReturning] = useState(false);
 
@@ -36,7 +36,7 @@ const ReturnBook = ({ userId, bookId }: Props) => {
           variant: "destructive",
         });
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast({
         title: "Error",
         description: "An error occurred while returning the book",

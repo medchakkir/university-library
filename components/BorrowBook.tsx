@@ -7,20 +7,22 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import { borrowBook } from "@/lib/actions/book";
 
-interface Props {
+interface BorrowingEligibility {
+  isEligible: boolean;
+  message: string;
+}
+
+interface BorrowBookProps {
   userId: string;
   bookId: string;
-  borrowingEligibility: {
-    isEligible: boolean;
-    message: string;
-  };
+  borrowingEligibility: BorrowingEligibility;
 }
 
 const BorrowBook = ({
   userId,
   bookId,
   borrowingEligibility: { isEligible, message },
-}: Props) => {
+}: BorrowBookProps) => {
   const router = useRouter();
   const [borrowing, setBorrowing] = useState(false);
 
@@ -52,7 +54,7 @@ const BorrowBook = ({
           variant: "destructive",
         });
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast({
         title: "Error",
         description: "An error occurred while borrowing the book",

@@ -1,6 +1,11 @@
 import BookCover from "@/components/BookCover";
+import { Book } from "@/types";
 
-const SimilarBooks = ({ books }: { books: Book[] }) => {
+interface SimilarBooksProps {
+  books: Book[];
+}
+
+const SimilarBooks = ({ books }: SimilarBooksProps) => {
   return (
     <div className="p-4">
       <h2 className="mb-4 font-bebas-neue text-4xl text-light-100">
