@@ -54,6 +54,7 @@ This document tracks the implementation progress of improvements for the Univers
 - [ ] Improve mobile responsiveness across all pages
 - [ ] Implement dark/light theme toggle
 - [ ] Add user preferences storage
+- [ ] Improve the app interfaces
 
 ### Architecture Improvements
 - [ ] Refactor components into smaller, more focused components
@@ -63,6 +64,7 @@ This document tracks the implementation progress of improvements for the Univers
 - [x] Add error boundaries to prevent UI crashes
 - [ ] Implement a logging system for client-side errors
 - [ ] Create a service layer to abstract API calls
+- [ ] Change Resend to EmailJS
 
 ### DevOps and Infrastructure
 - [ ] Set up continuous integration (CI) pipeline
@@ -72,6 +74,7 @@ This document tracks the implementation progress of improvements for the Univers
 - [ ] Implement database migration strategy
 - [ ] Add monitoring and alerting for production environment
 - [ ] Implement automated deployment process
+- [ ] Remove Upstash workspaces
 
 ### Documentation
 - [ ] Create comprehensive API documentation
