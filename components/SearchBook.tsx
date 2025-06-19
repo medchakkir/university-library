@@ -54,6 +54,7 @@ const SearchBook = ({ books }: SearchBookProps) => {
   const [search, setSearch] = useState("");
   const [genreFilter, setGenreFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [filteredBooks, setFilteredBooks] = useState<Book[]>(books);
 
   // Extract unique genres from books
   const genres = useMemo(() => {
@@ -62,10 +63,10 @@ const SearchBook = ({ books }: SearchBookProps) => {
   }, [books]);
 
   // Filter books based on search query and genre filter
-  const filteredBooks = useMemo(() => {
+  useEffect(() => {
     const query = search.toLowerCase();
 
-    return books.filter((book) => {
+    const filtered = books.filter((book) => {
       const matchesSearch =
         book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query) ||
@@ -78,6 +79,9 @@ const SearchBook = ({ books }: SearchBookProps) => {
 
       return matchesSearch && matchesGenre;
     });
+    
+    setFilteredBooks(filtered);
+    setCurrentPage(1);
   }, [search, genreFilter, books]);
 
   const totalPages = Math.ceil(filteredBooks.length / BOOKS_PER_PAGE);
