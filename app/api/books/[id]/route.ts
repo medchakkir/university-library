@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { books } from "@/database/schema";
 import { db } from "@/database/drizzle";
 import { eq } from "drizzle-orm";
+import { handleError } from "@/lib/utils";
 
 export async function DELETE(
   req: Request,
@@ -13,7 +14,7 @@ export async function DELETE(
     // Ensure ID exists
     if (!id) {
       return NextResponse.json(
-        { error: "Book ID is required" },
+        handleError("Book ID is required", "Book ID is required", false),
         { status: 400 },
       );
     }
@@ -22,14 +23,11 @@ export async function DELETE(
     await db.delete(books).where(eq(books.id, id));
 
     return NextResponse.json(
-      { message: "Book deleted successfully" },
+      { success: true, message: "Book deleted successfully" },
       { status: 200 },
     );
   } catch (error) {
-    console.error("Error deleting book:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+    const errorResponse = handleError(error, "Internal Server Error");
+    return NextResponse.json(errorResponse, { status: 500 });
   }
 }

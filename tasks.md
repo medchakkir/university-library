@@ -8,10 +8,9 @@ This document tracks the implementation progress of improvements for the Univers
 - [x] Remove duplicate file: `SimilarBooks.tsx~` (Found and removed `page.tsx~` in app/(auth)/sign-up directory)
 - [x] Fix typo in component filename: Rename `SeachBook.tsx` to `SearchBook.tsx` and update all imports (Note: The file was already correctly named SearchBook.tsx, no action needed)
 - [x] Add proper TypeScript typing for all components (define interfaces for props and state)
+- [x] Implement consistent error handling across all server actions
 
 ## In Progress Tasks
-
-- [ ] Implement consistent error handling across all server actions
 
 ## Future Tasks
 
@@ -61,7 +60,7 @@ This document tracks the implementation progress of improvements for the Univers
 - [ ] Implement a state management solution for complex state (Redux, Zustand, or Context API)
 - [ ] Create a component library with Storybook for UI components
 - [ ] Implement feature flags for gradual feature rollout
-- [ ] Add error boundaries to prevent UI crashes
+- [x] Add error boundaries to prevent UI crashes
 - [ ] Implement a logging system for client-side errors
 - [ ] Create a service layer to abstract API calls
 
@@ -105,3 +104,15 @@ The implementation will focus first on fixing critical issues and improving code
 - components/BorrowBook.tsx - Added proper TypeScript typing with BorrowBookProps and BorrowingEligibility interfaces
 - components/ReturnBook.tsx - Added proper TypeScript typing with ReturnBookProps interface
 - components/Header.tsx - Added proper TypeScript typing with HeaderProps interface
+- lib/utils.ts - Added error handling utilities (handleError, createSuccessResponse) and standardized API response types
+- lib/admin/actions/book.ts - Updated to use consistent error handling
+- lib/admin/actions/user.ts - Updated to use consistent error handling
+- lib/actions/auth.ts - Updated to use consistent error handling
+- lib/actions/book.ts - Updated to use consistent error handling
+- app/api/books/[id]/route.ts - Updated to use consistent error handling
+- app/api/users/[id]/route.ts - Updated to use consistent error handling
+- components/ErrorBoundary.tsx - Created error boundary component
+- app/error.tsx - Added global error handler
+- app/(root)/error.tsx - Added error handler for root route
+- app/admin/error.tsx - Added error handler for admin route
+- app/not-found.tsx - Added global 404 page

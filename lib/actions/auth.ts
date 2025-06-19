@@ -10,18 +10,20 @@ import ratelimit from "@/lib/ratelimit";
 import { redirect } from "next/navigation";
 import { workflowClient } from "@/lib/workflow";
 import config from "@/lib/config";
+import { ApiResponse, createSuccessResponse, handleError } from "@/lib/utils";
+import { AuthCredentials } from "@/types";
 
 export const signInWithCredentials = async (
-  params: Pick<AuthCredentials, "email" | "password">,
-) => {
+  params: Pick<AuthCredentials, "email" | "password">
+): Promise<ApiResponse> => {
   const { email, password } = params;
 
-  const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
-  const { success } = await ratelimit.limit(ip);
-
-  if (!success) return redirect("/too-fast");
-
   try {
+    const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+    const { success } = await ratelimit.limit(ip);
+
+    if (!success) return redirect("/too-fast");
+
     const result = await signIn("credentials", {
       email,
       password,
@@ -29,37 +31,36 @@ export const signInWithCredentials = async (
     });
 
     if (result?.error) {
-      return { success: false, error: result.error };
+      return handleError(result.error, "Invalid credentials", false);
     }
 
-    return { success: true };
+    return createSuccessResponse(undefined, "Signed in successfully");
   } catch (error) {
-    console.log(error, "Sign-in error");
-    return { success: false, error: "Sign-in error" };
+    return handleError(error, "Sign-in error");
   }
 };
 
-export const signUp = async (params: AuthCredentials) => {
+export const signUp = async (params: AuthCredentials): Promise<ApiResponse> => {
   const { fullName, email, password, profilePicture } = params;
 
-  const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
-  const { success } = await ratelimit.limit(ip);
-
-  if (!success) return redirect("/too-fast");
-
-  const existingUser = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
-
-  if (existingUser.length > 0) {
-    return { success: false, error: "User already exists" };
-  }
-
-  const hashedPassword = await hash(password, 10);
-
   try {
+    const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+    const { success } = await ratelimit.limit(ip);
+
+    if (!success) return redirect("/too-fast");
+
+    const existingUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+
+    if (existingUser.length > 0) {
+      return handleError("User already exists", "User already exists", false);
+    }
+
+    const hashedPassword = await hash(password, 10);
+
     await db.insert(users).values({
       fullName,
       email,
@@ -77,13 +78,12 @@ export const signUp = async (params: AuthCredentials) => {
 
     await signInWithCredentials({ email, password });
 
-    return { success: true };
+    return createSuccessResponse(undefined, "Signed up successfully");
   } catch (error) {
-    console.log(error, "Sign-up error");
-    return { success: false, error: "Sign-up error" };
+    return handleError(error, "Sign-up error");
   }
 };
 
-export const handleSignOut = async () => {
+export const handleSignOut = async (): Promise<void> => {
   await signOut();
 };

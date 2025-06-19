@@ -4,13 +4,15 @@ import { db } from "@/database/drizzle";
 import { books, borrowRecords } from "@/database/schema";
 import { and, eq } from "drizzle-orm";
 import dayjs from "dayjs";
+import { ApiResponse, createSuccessResponse, handleError } from "@/lib/utils";
+import { BorrowBookParams } from "@/types";
 
 interface BorrowBookParams {
   bookId: string;
   userId: string;
 }
 
-export const borrowBook = async (params: BorrowBookParams) => {
+export const borrowBook = async (params: BorrowBookParams): Promise<ApiResponse> => {
   const { userId, bookId } = params;
 
   try {
@@ -21,10 +23,7 @@ export const borrowBook = async (params: BorrowBookParams) => {
       .limit(1);
 
     if (!book.length || book[0].availableCopies <= 0) {
-      return {
-        success: false,
-        error: "Book is not available for borrowing",
-      };
+      return handleError("Book is not available for borrowing", "Book is not available for borrowing", false);
     }
 
     const dueDate = dayjs().add(7, "day").toDate().toDateString();
@@ -41,21 +40,16 @@ export const borrowBook = async (params: BorrowBookParams) => {
       .set({ availableCopies: book[0].availableCopies - 1 })
       .where(eq(books.id, bookId));
 
-    return {
-      success: true,
-      data: JSON.parse(JSON.stringify(record)),
-    };
+    return createSuccessResponse(
+      JSON.parse(JSON.stringify(record)),
+      "Book borrowed successfully"
+    );
   } catch (error) {
-    console.log(error);
-
-    return {
-      success: false,
-      error: "An error occurred while borrowing the book",
-    };
+    return handleError(error, "An error occurred while borrowing the book");
   }
 };
 
-export const returnBook = async (params: BorrowBookParams) => {
+export const returnBook = async (params: BorrowBookParams): Promise<ApiResponse> => {
   const { userId, bookId } = params;
 
   try {
@@ -72,10 +66,11 @@ export const returnBook = async (params: BorrowBookParams) => {
       .limit(1);
 
     if (!record.length) {
-      return {
-        success: false,
-        error: "No active borrow record found for this book and user",
-      };
+      return handleError(
+        "No active borrow record found for this book and user",
+        "No active borrow record found for this book and user",
+        false
+      );
     }
 
     await db
@@ -96,16 +91,11 @@ export const returnBook = async (params: BorrowBookParams) => {
         .where(eq(books.id, bookId));
     }
 
-    return {
-      success: true,
-      message: "Book returned successfully",
-    };
+    return createSuccessResponse(
+      undefined,
+      "Book returned successfully"
+    );
   } catch (error) {
-    console.log(error);
-
-    return {
-      success: false,
-      error: "An error occurred while returning the book",
-    };
+    return handleError(error, "An error occurred while returning the book");
   }
 };

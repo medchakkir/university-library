@@ -3,8 +3,10 @@
 import { books } from "@/database/schema";
 import { db } from "@/database/drizzle";
 import { eq } from "drizzle-orm";
+import { ApiResponse, createSuccessResponse, handleError } from "@/lib/utils";
+import { Book, BookParams } from "@/types";
 
-export const createBook = async (params: BookParams) => {
+export const createBook = async (params: BookParams): Promise<ApiResponse<Book>> => {
   try {
     const newBook = await db
       .insert(books)
@@ -14,21 +16,16 @@ export const createBook = async (params: BookParams) => {
       })
       .returning();
 
-    return {
-      success: true,
-      data: JSON.parse(JSON.stringify(newBook[0])),
-    };
+    return createSuccessResponse(
+      JSON.parse(JSON.stringify(newBook[0])),
+      "Book created successfully"
+    );
   } catch (error) {
-    console.log(error);
-
-    return {
-      success: false,
-      message: "An error occurred while creating the book",
-    };
+    return handleError(error, "An error occurred while creating the book");
   }
 };
 
-export const updateBook = async (id: string, params: BookParams) => {
+export const updateBook = async (id: string, params: BookParams): Promise<ApiResponse<Book>> => {
   try {
     const updatedBook = await db
       .update(books)
@@ -39,24 +36,23 @@ export const updateBook = async (id: string, params: BookParams) => {
       .where(eq(books.id, id))
       .returning();
 
-    return {
-      success: true,
-      data: JSON.parse(JSON.stringify(updatedBook[0])),
-    };
-  } catch (error) {
-    console.error(error);
+    if (!updatedBook.length) {
+      return handleError("Book not found", "Book not found", false);
+    }
 
-    return {
-      success: false,
-      message: "An error occurred while updating the book",
-    };
+    return createSuccessResponse(
+      JSON.parse(JSON.stringify(updatedBook[0])),
+      "Book updated successfully"
+    );
+  } catch (error) {
+    return handleError(error, "An error occurred while updating the book");
   }
 };
 
-export const getBookById = async (id: string) => {
+export const getBookById = async (id: string): Promise<Book | null> => {
   try {
     const book = await db.select().from(books).where(eq(books.id, id)).limit(1);
-    return book[0];
+    return book[0] || null;
   } catch (error) {
     console.error("Failed to fetch book:", error);
     return null;
