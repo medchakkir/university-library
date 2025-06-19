@@ -1,0 +1,8 @@
+---
+description: Best practices for form handling with React Hook Form
+globs: 
+alwaysApply: false
+---
+- Use `useForm` for managing form state efficiently.
+- Leverage `Controller` for integrating with UI libraries.
+- Implement validation using `@hookform/resolvers` for seamless error handling.

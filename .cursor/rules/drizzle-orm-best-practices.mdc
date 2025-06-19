@@ -1,0 +1,8 @@
+---
+description: Best practices for using Drizzle ORM
+globs: 
+alwaysApply: false
+---
+- Use migrations to manage database schema changes effectively.
+- Implement type-safe queries to leverage TypeScript benefits.
+- Keep your database interactions modular for better maintainability.

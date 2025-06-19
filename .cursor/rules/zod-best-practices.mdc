@@ -1,0 +1,8 @@
+---
+description: Best practices for schema validation with Zod
+globs: 
+alwaysApply: false
+---
+- Define schemas for data validation to ensure type safety.
+- Use `Zod` for parsing and validating incoming data.
+- Leverage Zod's built-in error handling for user-friendly feedback.

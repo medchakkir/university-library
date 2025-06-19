@@ -1,0 +1,8 @@
+---
+description: Best practices for using Radix UI components
+globs: 
+alwaysApply: false
+---
+- Use Radix components for accessible and customizable UI elements.
+- Follow the documentation for proper usage and integration.
+- Ensure components are styled consistently with your design system.

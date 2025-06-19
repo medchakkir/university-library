@@ -1,0 +1,8 @@
+---
+description: Best practices for making HTTP requests with Axios
+globs: 
+alwaysApply: false
+---
+- Use interceptors for handling requests and responses globally.
+- Implement error handling for better user experience.
+- Keep API calls modular and organized for maintainability.

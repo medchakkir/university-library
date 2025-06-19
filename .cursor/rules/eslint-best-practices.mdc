@@ -1,0 +1,8 @@
+---
+description: Best practices for using ESLint in your project
+globs: 
+alwaysApply: false
+---
+- Use a consistent coding style with ESLint rules.
+- Integrate Prettier for code formatting to avoid conflicts.
+- Regularly update ESLint and its plugins for the latest features and fixes.

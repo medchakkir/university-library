@@ -1,0 +1,9 @@
+---
+description: Guidelines for styling with Tailwind CSS
+globs: 
+alwaysApply: false
+---
+- Use utility-first classes for rapid styling.
+- Implement responsive design using Tailwind's responsive utilities.
+- Avoid excessive custom CSS to maintain consistency.
+
