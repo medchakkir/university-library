@@ -1,11 +1,14 @@
-import "next-auth"; // This line is optional and can be removed
+import "next-auth";
 
 declare module "next-auth" {
   interface User {
     id: string;
     name?: string;
     email?: string;
-    role: string; // Add the `role` property
+    role: string;
+    organizationId: string;
+    organizationName: string;
+    organizationSlug: string;
   }
 
   interface Session {
@@ -13,7 +16,21 @@ declare module "next-auth" {
       id: string;
       name?: string;
       email?: string;
-      role: string; // Add the `role` property
+      role: string;
+      organizationId: string;
+      organizationName: string;
+      organizationSlug: string;
     };
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    name?: string;
+    role: string;
+    organizationId: string;
+    organizationName: string;
+    organizationSlug: string;
   }
 }

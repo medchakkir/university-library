@@ -2,8 +2,8 @@ import NextAuth, { User } from "next-auth";
 import { compare } from "bcryptjs";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/database/drizzle";
-import { users } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { users, organizations } from "@/database/schema";
+import { eq, and } from "drizzle-orm";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
@@ -31,21 +31,45 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        organizationSlug: { label: "Organization", type: "text" },
       },
       async authorize(credentials) {
         try {
-          if (!credentials?.email || !credentials?.password) {
-            throw new Error("Email and password are required");
+          if (!credentials?.email || !credentials?.password || !credentials?.organizationSlug) {
+            throw new Error("Email, password, and organization are required");
           }
 
+          // First, find the organization
+          const organization = await db
+            .select()
+            .from(organizations)
+            .where(eq(organizations.slug, credentials.organizationSlug.toString()))
+            .limit(1);
+
+          if (organization.length === 0) {
+            throw new Error("Organization not found");
+          }
+
+          if (!organization[0].isActive) {
+            throw new Error("Organization is not active");
+          }
+
+          // Then find the user within that organization
           const user = await db
             .select()
             .from(users)
-            .where(eq(users.email, credentials.email.toString()))
+            .where(and(
+              eq(users.email, credentials.email.toString()),
+              eq(users.organizationId, organization[0].id)
+            ))
             .limit(1);
 
           if (user.length === 0) {
-            throw new Error("User not found");
+            throw new Error("User not found in this organization");
+          }
+
+          if (!user[0].isActive) {
+            throw new Error("User account is not active");
           }
 
           const isPasswordValid = await compare(
@@ -62,6 +86,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email: user[0].email,
             name: user[0].fullName,
             role: user[0].role,
+            organizationId: organization[0].id,
+            organizationName: organization[0].name,
+            organizationSlug: organization[0].slug,
           } as User;
         } catch (error) {
           console.error("Authorization error:", error);
@@ -79,6 +106,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id;
         token.name = user.name;
         token.role = user.role;
+        token.organizationId = user.organizationId;
+        token.organizationName = user.organizationName;
+        token.organizationSlug = user.organizationSlug;
       }
 
       return token;
@@ -88,6 +118,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id as string;
         session.user.name = token.name as string;
         session.user.role = token.role as string;
+        session.user.organizationId = token.organizationId as string;
+        session.user.organizationName = token.organizationName as string;
+        session.user.organizationSlug = token.organizationSlug as string;
       }
 
       return session;
