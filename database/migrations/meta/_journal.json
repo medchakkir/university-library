@@ -8,6 +8,13 @@
       "when": 1748514514856,
       "tag": "0000_worthless_cobalt_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1753498489781,
+      "tag": "0001_glossy_mikhail_rasputin",
+      "breakpoints": true
     }
   ]
 }
